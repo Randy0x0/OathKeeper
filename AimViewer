@@ -2,7 +2,7 @@ _G.Enable = false
 _G.Color = Color3.fromRGB(255,0,0)
 _G.AimViewKeybind = "p"
 _G.AimViewTarget = 't' 
-_G.AimViewAimViewAimViewAimViewAimViewMethod = "MousePos"
+_G.AimViewMethod = "MousePos"
 
 local RunService = game:GetService("RunService")
 local localPlayer = game.Players.LocalPlayer
@@ -64,7 +64,7 @@ RunService.RenderStepped:Connect(function()
     if _G.Enable and Target.Character:FindFirstChild("BodyEffects") and Target.Character:FindFirstChild("Head")  then
         a.Enabled = true
         b.Position =  Target.Character:FindFirstChild("Head").Position
-        c.Position = Target.Character.BodyEffects[_G.AimViewAimViewAimViewAimViewMethod].Value
+        c.Position = Target.Character.BodyEffects[_G.AimViewMethod].Value
     else
         a.Enabled = false
     end
