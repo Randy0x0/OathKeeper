@@ -1,15 +1,15 @@
-_G.enable = false
-_G.color = Color3.fromRGB(255,0,0)
-_G.toggle_keybind = "p"
-_G.swith_nigga = 't' 
-_G.method = "MousePos"
+_G.Enable = false
+_G.Color = Color3.fromRGB(255,0,0)
+_G.AimViewKeybind = "p"
+_G.AimViewTarget = 't' 
+_G.AimViewAimViewAimViewAimViewAimViewMethod = "MousePos"
 
-local rs = game:GetService("RunService")
+local RunService = game:GetService("RunService")
 local localPlayer = game.Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
-local target;
+local Target;
 
-function get_closet()
+function GetClose()
     local a = math.huge
     local b;
     for i, v in pairs(game.Players:GetPlayers()) do
@@ -26,18 +26,18 @@ function get_closet()
 end
 
 mouse.KeyDown:Connect(function(z)
-    if z == _G.toggle_keybind then
-        if _G.enable == false then
-            _G.enable = true
-        elseif _G.enable == true then
-            _G.enable = false 
+    if z == _G.AimViewKeybind then
+        if _G.Enable == false then
+            _G.Enable = true
+        elseif _G.Enable == true then
+            _G.Enable = false 
         end
     end
 end)
 
 mouse.KeyDown:Connect(function(z)
-    if z == _G.swith_nigga then
-        target = get_closet()
+    if z == _G.AimViewTarget then
+        Target = GetClose()
     end
 end)
 
@@ -45,7 +45,7 @@ local a=Instance.new("Beam")
 a.Segments=1;
 a.Width0=0.2;
 a.Width1=0.2;
-a.Color=ColorSequence.new(_G.color);
+a.Color=ColorSequence.new(_G.Color);
 a.FaceCamera=true;
 local b=Instance.new("Attachment")
 local c=Instance.new("Attachment")
@@ -55,16 +55,16 @@ a.Parent=workspace.Terrain;
 b.Parent=workspace.Terrain;
 c.Parent=workspace.Terrain;
 
-rs.RenderStepped:Connect(function()
+RunService.RenderStepped:Connect(function()
     local character = localPlayer.Character
     if not character then
         a.Enabled = false
         return
     end
-    if _G.enable and target.Character:FindFirstChild("BodyEffects") and target.Character:FindFirstChild("Head")  then
+    if _G.Enable and Target.Character:FindFirstChild("BodyEffects") and Target.Character:FindFirstChild("Head")  then
         a.Enabled = true
-        b.Position =  target.Character:FindFirstChild("Head").Position
-        c.Position = target.Character.BodyEffects[_G.method].Value
+        b.Position =  Target.Character:FindFirstChild("Head").Position
+        c.Position = Target.Character.BodyEffects[_G.AimViewAimViewAimViewAimViewMethod].Value
     else
         a.Enabled = false
     end
