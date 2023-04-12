@@ -1,6 +1,13 @@
 -- Anti Lock KeyBind: Z
 -- Frank Billington On Top!!!!!!!
 
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/vKhonshu/intro2/main/ui2"))()
+local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/vKhonshu/intro/main/ui"))()
+NotifyLib.prompt('OathKeeper - Keybinds Below', 'Loading..', 5)
+NotifyLib.prompt('OathKeeper - AimView Toggle', 'P', 5)
+NotifyLib.prompt('OathKeeper - AimView Target', 'T', 5)
+NotifyLib.prompt('OathKeeper - AntiLock Toggle', 'Z', 5)
+
 _G.Enable = false
 _G.Color = Color3.fromRGB(255,0,0)
 _G.AimViewToggle = "p"
