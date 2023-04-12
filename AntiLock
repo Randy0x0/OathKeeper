@@ -1,0 +1,105 @@
+local RunService = game:GetService("RunService")
+local LocalPlayer = game.Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Target;
+
+function GetClose()
+    local a = math.huge
+    local b;
+    for i, v in pairs(game.Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("Head") and  v.Character:FindFirstChild("HumanoidRootPart")  then
+            local c = game.Workspace.CurrentCamera:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+            local d = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(c.X, c.Y)).Magnitude
+            if a > d then
+                b = v
+                a = d
+            end
+        end
+    end
+    return b
+end
+
+Mouse.KeyDown:Connect(function(z)
+    if z == _G.AimViewToggle then
+        if _G.Enable == false then
+            _G.Enable = true
+        elseif _G.Enable == true then
+            _G.Enable = false 
+        end
+    end
+end)
+
+Mouse.KeyDown:Connect(function(z)
+    if z == _G.AimViewTarget then
+        Target = GetClose()
+    end
+end)
+
+local a=Instance.new("Beam")
+a.Segments=1;
+a.Width0=0.2;
+a.Width1=0.2;
+a.Color=ColorSequence.new(_G.Color);
+a.FaceCamera=true;
+local b=Instance.new("Attachment")
+local c=Instance.new("Attachment")
+a.Attachment0=b;
+a.Attachment1=c;
+a.Parent=workspace.Terrain;
+b.Parent=workspace.Terrain;
+c.Parent=workspace.Terrain;
+
+RunService.RenderStepped:Connect(function()
+    local character = LocalPlayer.Character
+    if not character then
+        a.Enabled = false
+        return
+    end
+    if _G.Enable and Target.Character:FindFirstChild("BodyEffects") and Target.Character:FindFirstChild("Head")  then
+        a.Enabled = true
+        b.Position =  Target.Character:FindFirstChild("Head").Position
+        c.Position = Target.Character.BodyEffects[_G.AimViewMethod].Value
+    else
+        a.Enabled = false
+    end
+end)
+
+local Velocity = Vector3.new(200, 700, 200)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+
+local VelocityChanger = false
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character
+local RootPart = Character:WaitForChild("HumanoidRootPart")
+
+local function Notification(message)
+    game.StarterGui:SetCore("Notification", {
+        Title = "Frank Billington Anti-Lock",
+        Text = message,
+        Icon = "rbxassetid://7215458251",
+        Duration = 2,
+    })
+end
+
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == _G.AntiLock and not UIS:GetFocusedTextBox() then
+        VelocityChanger = not VelocityChanger
+        if VelocityChanger then
+            Notification("Anti-Lock Enabled")
+            while VelocityChanger do
+                if RootPart then
+                    local RVelocity = RootPart.Velocity
+                    RootPart.Velocity = type(Velocity) == "vector" and Velocity or Velocity(RVelocity)
+                    RunService.RenderStepped:Wait()
+                    RootPart.Velocity = RVelocity
+                end
+                RunService.Heartbeat:Wait()
+            end
+        else
+            Notification("Anti-Lock Disabled")
+        end
+    end
+end)
