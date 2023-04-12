@@ -1,15 +1,18 @@
+-- Anti Lock KeyBind: Z
+-- Frank Billington On Top!!!!!!!
+
 _G.Enable = false
 _G.Color = Color3.fromRGB(255,0,0)
-_G.AimViewKeybind = "p"
+_G.AimViewToggle = "p"
 _G.AimViewTarget = 't' 
-_G.AimViewMethod = "MousePos"
+_G.AimViewMethod = "MousePos" -- Dont Touch
 
-local RunService = game:GetService("RunService")
+local rs = game:GetService("RunService")
 local localPlayer = game.Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
-local Target;
+local target;
 
-function GetClose()
+function get_closet()
     local a = math.huge
     local b;
     for i, v in pairs(game.Players:GetPlayers()) do
@@ -26,7 +29,7 @@ function GetClose()
 end
 
 mouse.KeyDown:Connect(function(z)
-    if z == _G.AimViewKeybind then
+    if z == _G.AimViewToggle then
         if _G.Enable == false then
             _G.Enable = true
         elseif _G.Enable == true then
@@ -37,7 +40,7 @@ end)
 
 mouse.KeyDown:Connect(function(z)
     if z == _G.AimViewTarget then
-        Target = GetClose()
+        target = get_closet()
     end
 end)
 
@@ -55,17 +58,58 @@ a.Parent=workspace.Terrain;
 b.Parent=workspace.Terrain;
 c.Parent=workspace.Terrain;
 
-RunService.RenderStepped:Connect(function()
+rs.RenderStepped:Connect(function()
     local character = localPlayer.Character
     if not character then
         a.Enabled = false
         return
     end
-    if _G.Enable and Target.Character:FindFirstChild("BodyEffects") and Target.Character:FindFirstChild("Head")  then
+    if _G.Enable and target.Character:FindFirstChild("BodyEffects") and target.Character:FindFirstChild("Head")  then
         a.Enabled = true
-        b.Position =  Target.Character:FindFirstChild("Head").Position
-        c.Position = Target.Character.BodyEffects[_G.AimViewMethod].Value
+        b.Position =  target.Character:FindFirstChild("Head").Position
+        c.Position = target.Character.BodyEffects[_G.AimViewMethod].Value
     else
         a.Enabled = false
+    end
+end)
+
+local Velocity = Vector3.new(200, 700, 200)
+local KeyBind = Enum.KeyCode.Z
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+
+local VelocityChanger = false
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character
+local RootPart = Character:WaitForChild("HumanoidRootPart")
+
+local function sendNotification(message)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Frank Billington Anti-Lock",
+        Text = message,
+        Icon = "rbxassetid://7215458251",
+        Duration = 2,
+    })
+end
+
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == KeyBind and not UIS:GetFocusedTextBox() then
+        VelocityChanger = not VelocityChanger
+        if VelocityChanger then
+            sendNotification("Anti-Lock Enabled")
+            while VelocityChanger do
+                if RootPart then
+                    local RVelocity = RootPart.Velocity
+                    RootPart.Velocity = type(Velocity) == "vector" and Velocity or Velocity(RVelocity)
+                    RunService.RenderStepped:Wait()
+                    RootPart.Velocity = RVelocity
+                end
+                RunService.Heartbeat:Wait()
+            end
+            else
+                  sendNotification("Anti-Lock Disabled")
+        end
     end
 end)
